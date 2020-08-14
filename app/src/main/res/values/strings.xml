@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Notepad</string>
+    <string name="no_notes">No Notes Yet</string>
+    <string name="action_settings">Vista previa</string>
+
+    // Opciones generales
+    <string name="menu_insert">Añadir nota</string>
+    <string name="menu_pruebas">Prueba</string>
+
+    // Opciones de una nota
+    <string name="menu_delete">Eliminar nota</string>
+    <string name="menu_edit">Editar nota</string>
+    <string name="menu_send_mail">Enviar por email</string>
+    <string name="menu_send_sms">Enviar por SMS</string>
+
+    // Vista 'Editar nota'
+    <string name="title_activity_note_edit">EditNote</string>
+    <string name="ID_note">ID</string>
+    <string name="title">Título</string>
+    <string name="body">Cuerpo</string>
+    <string name="category">Categoría</string>
+    <string name="confirm">Confirmar</string>
+    <string name="discard">Descartar</string>
+    <string name="edit_note">Editar nota</string>
+    <string name="filter_title">d</string>
+    <string name="order_title">jjj</string>
+    <string name="order_category">wdd</string>
+</resources>
