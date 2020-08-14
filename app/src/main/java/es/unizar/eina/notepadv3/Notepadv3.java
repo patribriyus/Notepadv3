@@ -71,21 +71,14 @@ public class Notepadv3 extends AppCompatActivity {
 
         // Create an array to specify the fields we want to display in the list (only TITLE)
         String[] notas = new String[]{NotesDbAdapter.KEY_TITLE};
-        // Se guardan las categorías de cada una de las notas
-        String[] categ = new String[]{NotesDbAdapter.KEY_CATEGORY};
 
         // and an array of the fields we want to bind those fields to (in this case just text1)
         int[] notes_layout = new int[]{R.id.nom_nota};
-        // se asocian las categorías con el identificador donde se muestran
-        int[] categories_layout = new int[]{R.id.nom_categoria};
 
         // Now create an array adapter and set it to display using our row
         SimpleCursorAdapter notes =
                 new SimpleCursorAdapter(this, R.layout.notes_row, notesCursor, notas, notes_layout);
-        SimpleCursorAdapter categories =
-                new SimpleCursorAdapter(this, R.layout.notes_row, notesCursor, categ, categories_layout);
         mList.setAdapter(notes);
-        mList.setAdapter(categories);
 
     }
 
