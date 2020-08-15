@@ -9,6 +9,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".Notepadv3"
             android:label="@string/app_name">
@@ -25,6 +26,25 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Notepadv3" />
+        </activity>
+
+
+        <activity
+            android:name="es.unizar.eina.categories.Category"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="es.unizar.eina.categories.CategoryEdit"
+            android:label="@string/title_activity_cat_edit"
+            android:parentActivityName="es.unizar.eina.categories.Category">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.unizar.eina.categories.Category" />
         </activity>
     </application>
 

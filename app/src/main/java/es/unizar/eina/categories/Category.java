@@ -1,44 +1,39 @@
-package es.unizar.eina.notepadv3;
+package es.unizar.eina.categories;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.database.Cursor;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
 
-import es.unizar.eina.categories.Category;
+import es.unizar.eina.notepadv3.NoteEdit;
+import es.unizar.eina.notepadv3.NotesDbAdapter;
+import es.unizar.eina.notepadv3.R;
 import es.unizar.eina.send.SendAbstraction;
 import es.unizar.eina.send.SendAbstractionImpl;
 
+import static es.unizar.eina.notepadv3.NotesDbAdapter.Item.CATEGORY;
 import static es.unizar.eina.notepadv3.NotesDbAdapter.Item.NOTE;
 
 
-public class Notepadv3 extends AppCompatActivity {
+public class Category extends AppCompatActivity {
 
     private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_EDIT = 1;
-    private static final int ACTIVITY_CATEGORIES = 2;
 
     private static final int PRUEBAS = Menu.FIRST;
     private static final int DELETE_ID = Menu.FIRST + 1;
     private static final int EDIT_ID = Menu.FIRST + 2;
-    private static final int SEND_MAIL_ID = Menu.FIRST + 3;
-    private static final int SEND_SMS_ID = Menu.FIRST + 4;
 
     private NotesDbAdapter mDbHelper;
     private ListView mList;
-
-    private int checkedItem = 0;
 
 
     /**
@@ -54,15 +49,7 @@ public class Notepadv3 extends AppCompatActivity {
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               createNote();
-            }
-        });
-
-        Button btn_ojo= (Button) findViewById(R.id.btn_ojo);
-        btn_ojo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAlertDialog();
+               createCategory();
             }
         });
 
@@ -75,47 +62,21 @@ public class Notepadv3 extends AppCompatActivity {
 
     }
 
-    private void showAlertDialog() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Ver:");
-        String[] items = {"Notas","Categorías"};
-        alertDialog.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                checkedItem = which;
-                switch (which) {
-                    case 0: // NOTAS
-                        //Toast.makeText(Notepadv3.this, "Ver notas", Toast.LENGTH_LONG).show();
-                        fillData();
-                        break;
-                    case 1: // CATEGORIAS
-                        //Toast.makeText(Notepadv3.this, "Ver categorías", Toast.LENGTH_LONG).show();
-                        fetchCategories();
-                        break;
-                }
-            }
-        });
-        AlertDialog alert = alertDialog.create();
-        alert.setCanceledOnTouchOutside(false);
-        alert.show();
-    }
-
     private void fillData() {
         // Get all of the notes from the database and create the item list
-        Cursor notesCursor = mDbHelper.fetchAllItems(NOTE);
+        Cursor notesCursor = mDbHelper.fetchAllItems(CATEGORY);
         startManagingCursor(notesCursor);
 
         // Create an array to specify the fields we want to display in the list (only TITLE)
         String[] notas = new String[]{NotesDbAdapter.KEY_TITLE};
 
         // and an array of the fields we want to bind those fields to (in this case just text1)
-        int[] notes_layout = new int[]{R.id.nom_nota};
+        int[] notes_layout = new int[]{R.id.nom_categoria};
 
         // Now create an array adapter and set it to display using our row
         SimpleCursorAdapter notes =
-                new SimpleCursorAdapter(this, R.layout.notes_row, notesCursor, notas, notes_layout);
+                new SimpleCursorAdapter(this, R.layout.categories_row, notesCursor, notas, notes_layout);
         mList.setAdapter(notes);
-
     }
 
 
@@ -146,10 +107,8 @@ public class Notepadv3 extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.menu_note_delete);
-        menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.menu_note_edit);
-        menu.add(Menu.NONE, SEND_MAIL_ID, Menu.NONE, R.string.menu_note_send_mail);
-        menu.add(Menu.NONE, SEND_SMS_ID, Menu.NONE, R.string.menu_note_send_sms);
+        menu.add(Menu.NONE, DELETE_ID, Menu.NONE, R.string.menu_cat_delete);
+        menu.add(Menu.NONE, EDIT_ID, Menu.NONE, R.string.menu_cat_edit);
     }
 
     @Override
@@ -161,41 +120,21 @@ public class Notepadv3 extends AppCompatActivity {
                 fillData();
                 return true;
             case EDIT_ID:
-                editNote(info.position, info.id);
+                editCategory(info.position, info.id);
                 return true;
-            case SEND_MAIL_ID:
-                sendNote(info.id, "mail");
-            case SEND_SMS_ID:
-                sendNote(info.id, "SMS");
         }
         return super.onContextItemSelected(item);
     }
 
-    private void createNote() {
-        Intent i = new Intent(this, NoteEdit.class);
+    private void createCategory() {
+        Intent i = new Intent(this, CategoryEdit.class);
         startActivityForResult(i, ACTIVITY_CREATE);
     }
 
-    protected void editNote(int position, long id) {
-        Intent i = new Intent(this, NoteEdit.class);
+    protected void editCategory(int position, long id) {
+        Intent i = new Intent(this, CategoryEdit.class);
         i.putExtra(NotesDbAdapter.KEY_ROWID, id);
         startActivityForResult(i, ACTIVITY_EDIT);
-    }
-
-    protected void sendNote(long ID, String method) {
-        Cursor note = mDbHelper.fetchItem(NOTE, ID);
-        String title = note.getString(
-                note.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE));
-        String body = note.getString(
-                note.getColumnIndexOrThrow(NotesDbAdapter.KEY_BODY));
-        SendAbstraction noteSend = new SendAbstractionImpl(this, method);
-        noteSend.send(title, body);
-    }
-
-    private void fetchCategories() {
-        Intent i = new Intent(this, Category.class);
-        startActivityForResult(i, ACTIVITY_CATEGORIES);
-        //startActivity(new Intent(this,Category.class));
     }
 
     @Override
