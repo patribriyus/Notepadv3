@@ -17,6 +17,8 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import es.unizar.eina.categories.Category;
+import es.unizar.eina.adapter.myAdapter;
+import es.unizar.eina.send.MailImplementor;
 import es.unizar.eina.send.SendAbstraction;
 import es.unizar.eina.send.SendAbstractionImpl;
 
@@ -103,19 +105,9 @@ public class Notepadv3 extends AppCompatActivity {
     private void fillData() {
         // Get all of the notes from the database and create the item list
         Cursor notesCursor = mDbHelper.fetchAllItems(NOTE);
-        startManagingCursor(notesCursor);
 
-        // Create an array to specify the fields we want to display in the list (only TITLE)
-        String[] notas = new String[]{NotesDbAdapter.KEY_TITLE};
-
-        // and an array of the fields we want to bind those fields to (in this case just text1)
-        int[] notes_layout = new int[]{R.id.nom_nota};
-
-        // Now create an array adapter and set it to display using our row
-        SimpleCursorAdapter notes =
-                new SimpleCursorAdapter(this, R.layout.notes_row, notesCursor, notas, notes_layout);
-        mList.setAdapter(notes);
-
+        myAdapter adapter = new myAdapter(this, notesCursor);
+        mList.setAdapter(adapter);
     }
 
 

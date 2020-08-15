@@ -27,6 +27,7 @@ public class NotesDbAdapter {
     };
 
     public static final String KEY_TITLE = "title";
+    public static final String KEY_TITLE_CAT = "title_cat";
     public static final String KEY_BODY = "body";
     public static final String KEY_CATEGORY = "category";
     public static final String KEY_ROWID = "_id";
@@ -40,11 +41,11 @@ public class NotesDbAdapter {
      */
     private static final String NOTES_DATABASE_CREATE =
             "create table notes (_id integer primary key autoincrement, "
-                    + "title text not null, body text not null, category integer (0),"
+                    + "title text not null, body text not null, category integer not null,"
                     + "foreign key(category) references categories(_id) on delete set DEFAULT);";
     private static final String CATEGORIES_DATABASE_CREATE =
             "create table categories (_id integer primary key autoincrement, "
-                    + "title text not null);";
+                    + "title_cat text not null);";
 
     private static final String NOTES_DATABASE_TABLE = "notes";
     private static final String CATEGORIES_DATABASE_TABLE = "categories";
@@ -67,7 +68,7 @@ public class NotesDbAdapter {
 
             // Se inserta la categoria por defecto
             ContentValues initialValues = new ContentValues();
-            initialValues.put(KEY_TITLE, "--");
+            initialValues.put(KEY_TITLE_CAT, "--");
             db.insert(CATEGORIES_DATABASE_TABLE, null, initialValues);
         }
 
@@ -154,8 +155,8 @@ public class NotesDbAdapter {
      */
     public Cursor fetchAllItems(Item item) {
         if(item == item.NOTE){
-            return mDb.query(NOTES_DATABASE_TABLE, new String[]{KEY_ROWID, KEY_TITLE,
-                    KEY_BODY, KEY_CATEGORY}, null, null, null, null, KEY_TITLE);
+            String MY_QUERY = "select * FROM notes n left join categories c on n.category = c.`_id`";
+            return mDb.rawQuery(MY_QUERY, null);
         }
         else{
             return mDb.query(CATEGORIES_DATABASE_TABLE, new String[]{KEY_ROWID, KEY_TITLE},

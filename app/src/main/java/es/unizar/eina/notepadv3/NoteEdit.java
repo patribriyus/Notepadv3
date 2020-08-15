@@ -120,7 +120,7 @@ public class NoteEdit extends AppCompatActivity {
         String title = mTitleText.getText().toString();
         String body = mBodyText.getText().toString();
         //int category = spinner.getText().toString();
-        int category = 2;
+        int category = 1;
         if (mRowId == null) {
             long id = mDbHelper.createItem(NOTE, title, body, category);
             if (id > 0) {
