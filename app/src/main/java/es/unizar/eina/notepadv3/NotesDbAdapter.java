@@ -50,7 +50,7 @@ public class NotesDbAdapter {
     private static final String CATEGORIES_DATABASE_TABLE = "categories";
 
     private static final String DATABASE_NAME = "data";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
 
     private final Context mCtx;
 
