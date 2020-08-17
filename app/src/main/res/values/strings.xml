@@ -8,10 +8,14 @@
     <string name="menu_pruebas">Prueba</string>
 
     // Opciones de una nota
-    <string name="menu_delete">Eliminar nota</string>
-    <string name="menu_edit">Editar nota</string>
-    <string name="menu_send_mail">Enviar por email</string>
-    <string name="menu_send_sms">Enviar por SMS</string>
+    <string name="menu_note_delete">Eliminar nota</string>
+    <string name="menu_note_edit">Editar nota</string>
+    <string name="menu_note_send_mail">Enviar por email</string>
+    <string name="menu_note_send_sms">Enviar por SMS</string>
+
+    // Opciones de una categoría
+    <string name="menu_cat_delete">Eliminar categoría</string>
+    <string name="menu_cat_edit">Editar categoría</string>
 
     // Vista 'Editar nota'
     <string name="title_activity_note_edit">EditNote</string>
@@ -20,9 +24,12 @@
     <string name="body">Cuerpo</string>
     <string name="category">Categoría</string>
     <string name="confirm">Confirmar</string>
-    <string name="discard">Descartar</string>
+    <string name="discard">Cancelar</string>
     <string name="edit_note">Editar nota</string>
-    <string name="filter_title">d</string>
-    <string name="order_title">jjj</string>
-    <string name="order_category">wdd</string>
+
+    // Vista 'Editar categoría'
+    <string name="title_activity_cat_edit">EditCategory</string>
+    <string name="ID_cat">ID</string>
+    <string name="title_cat">Título</string>
+    <string name="edit_cat">Editar categoría</string>
 </resources>

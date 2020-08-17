@@ -22,11 +22,12 @@ import static android.text.TextUtils.isEmpty;
  */
 public class NotesDbAdapter {
 
-    enum Item{
+    public enum Item{
       NOTE, CATEGORY
     };
 
     public static final String KEY_TITLE = "title";
+    public static final String KEY_TITLE_CAT = "title_cat";
     public static final String KEY_BODY = "body";
     public static final String KEY_CATEGORY = "category";
     public static final String KEY_ROWID = "_id";
@@ -40,11 +41,11 @@ public class NotesDbAdapter {
      */
     private static final String NOTES_DATABASE_CREATE =
             "create table notes (_id integer primary key autoincrement, "
-                    + "title text not null, body text not null, category integer (0),"
+                    + "title text not null, body text not null, category integer not null,"
                     + "foreign key(category) references categories(_id) on delete set DEFAULT);";
     private static final String CATEGORIES_DATABASE_CREATE =
             "create table categories (_id integer primary key autoincrement, "
-                    + "title text not null);";
+                    + "title_cat text not null);";
 
     private static final String NOTES_DATABASE_TABLE = "notes";
     private static final String CATEGORIES_DATABASE_TABLE = "categories";
@@ -67,7 +68,7 @@ public class NotesDbAdapter {
 
             // Se inserta la categoria por defecto
             ContentValues initialValues = new ContentValues();
-            initialValues.put(KEY_TITLE, "--");
+            initialValues.put(KEY_TITLE_CAT, "--");
             db.insert(CATEGORIES_DATABASE_TABLE, null, initialValues);
         }
 
@@ -124,15 +125,18 @@ public class NotesDbAdapter {
         if (isEmpty(title.replaceAll("\\s*", ""))) return -1;
 
         ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_TITLE, title);
 
         if(item == Item.NOTE) {
+            initialValues.put(KEY_TITLE, title);
             initialValues.put(KEY_BODY, body);
             initialValues.put(KEY_CATEGORY, category);
 
             return mDb.insert(NOTES_DATABASE_TABLE, null, initialValues);
         }
-        else return mDb.insert(CATEGORIES_DATABASE_TABLE, null, initialValues);
+        else {
+            initialValues.put(KEY_TITLE_CAT, title);
+            return mDb.insert(CATEGORIES_DATABASE_TABLE, null, initialValues);
+        }
 
     }
 
@@ -153,14 +157,12 @@ public class NotesDbAdapter {
      * @return Cursor over all notes
      */
     public Cursor fetchAllItems(Item item) {
-        if(item == item.NOTE){
-            return mDb.query(NOTES_DATABASE_TABLE, new String[]{KEY_ROWID, KEY_TITLE,
-                    KEY_BODY, KEY_CATEGORY}, null, null, null, null, KEY_TITLE);
-        }
-        else{
-            return mDb.query(CATEGORIES_DATABASE_TABLE, new String[]{KEY_ROWID, KEY_TITLE},
-                    null, null, null, null, KEY_TITLE);
-        }
+        String MY_QUERY;
+
+        if(item == item.NOTE)  MY_QUERY = "select n._id, n.title, c.title_cat FROM notes n left join categories c on n.category = c._id order by n.title";
+        else MY_QUERY = "SELECT _id, title_cat FROM categories WHERE `_id` > 1";
+
+        return mDb.rawQuery(MY_QUERY, null);
     }
 
     /**
@@ -181,7 +183,7 @@ public class NotesDbAdapter {
         else{
             mCursor =
                     mDb.query(true, CATEGORIES_DATABASE_TABLE, new String[]{KEY_ROWID,
-                                    KEY_TITLE}, KEY_ROWID + "=" + rowId, null,
+                                    KEY_TITLE_CAT}, KEY_ROWID + "=" + rowId, null,
                             null, null, null, null);
         }
         if (mCursor != null) {
@@ -203,15 +205,16 @@ public class NotesDbAdapter {
      */
     public boolean updateItem(Item item, long rowId, String title, String body, long category) {
         ContentValues args = new ContentValues();
-        args.put(KEY_TITLE, title);
 
         if(item == item.NOTE){
+            args.put(KEY_TITLE, title);
             args.put(KEY_BODY, body);
             args.put(KEY_CATEGORY, category);
 
             return mDb.update(NOTES_DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
         }
         else{
+            args.put(KEY_TITLE_CAT, title);
             return mDb.update(CATEGORIES_DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
         }
     }

@@ -14,10 +14,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/ID_note" />
+            android:text="@string/ID_cat" />
 
         <EditText
-            android:id="@+id/id_nota"
+            android:id="@+id/id_cat"
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,42 +34,14 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title" />
+            android:text="@string/title_cat" />
 
         <EditText
-            android:id="@+id/title"
+            android:id="@+id/title_cat"
             android:layout_marginLeft="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/body" />
-
-    <EditText
-        android:id="@+id/body"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="vertical"
-        />
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/category" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_marginLeft="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
     </LinearLayout>
 
     <LinearLayout
