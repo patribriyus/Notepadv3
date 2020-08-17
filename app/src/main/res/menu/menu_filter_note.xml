@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <item
+        android:id="@+id/mostrar_notas"
+        android:title="Mostrar por"
+        app:showAsAction="ifRoom">
+
+        <menu>
+            <item
+                android:id="@+id/sort_by"
+                android:title="Ordenación"
+                app:showAsAction="ifRoom">
+                <menu>
+                    <item
+                        android:id="@+id/byd_categories"
+                        android:title="Título" />
+                    <item
+                        android:id="@+id/by_title"
+                        android:title="Categoría" />
+                </menu>
+
+            </item>
+            <item
+                android:id="@+id/by_categories"
+                android:title="Por categoría" />
+        </menu>
+
+    </item>
 </menu>

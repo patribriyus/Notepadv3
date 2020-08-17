@@ -120,7 +120,7 @@ public class Notepadv3 extends AppCompatActivity {
         menu.add(Menu.NONE, PRUEBAS, Menu.NONE, R.string.menu_pruebas);
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_category, menu);
+        inflater.inflate(R.menu.menu_filter_note, menu);
 
         return result;
     }
