@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.database.Cursor;
 import android.view.View;
@@ -79,7 +81,7 @@ public class Notepadv3 extends AppCompatActivity {
 
     private void showAlertDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Ver:");
+        alertDialog.setTitle("Ver");
         String[] items = {"Notas","Categorías"};
         alertDialog.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
             @Override
@@ -117,8 +119,8 @@ public class Notepadv3 extends AppCompatActivity {
         //menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.menu_insert);
         menu.add(Menu.NONE, PRUEBAS, Menu.NONE, R.string.menu_pruebas);
 
-        //MenuInflater inflater = getMenuInflater();
-        //inflater.inflate(R.menu.menu_category, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_category, menu);
 
         return result;
     }
@@ -149,6 +151,7 @@ public class Notepadv3 extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case DELETE_ID:
+                Log.i("TAG",String.valueOf(item.getItemId()));
                 mDbHelper.deleteItem(NOTE, info.id);
                 fillData();
                 return true;
@@ -187,7 +190,6 @@ public class Notepadv3 extends AppCompatActivity {
     private void fetchCategories() {
         Intent i = new Intent(this, Category.class);
         startActivityForResult(i, ACTIVITY_CATEGORIES);
-        //startActivity(new Intent(this,Category.class));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package es.unizar.eina.categories;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,7 @@ import android.widget.Spinner;
 
 import java.util.List;
 
+import es.unizar.eina.notepadv3.Notepadv3;
 import es.unizar.eina.notepadv3.NotesDbAdapter;
 import es.unizar.eina.notepadv3.R;
 
@@ -57,6 +59,14 @@ public class CategoryEdit extends AppCompatActivity {
             }
 
         });
+
+        Button discard= (Button) findViewById(R.id.discard);
+        discard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     // Recupera los datos de la categoria
@@ -66,7 +76,7 @@ public class CategoryEdit extends AppCompatActivity {
             startManagingCursor(note);
             mIdText.setText(mRowId.toString());
             mTitleText.setText(note.getString(
-                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE)));
+                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE_CAT)));
         } else {
             mIdText.setText("***");
         }

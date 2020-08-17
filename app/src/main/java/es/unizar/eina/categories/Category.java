@@ -1,9 +1,12 @@
 package es.unizar.eina.categories;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +17,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import es.unizar.eina.notepadv3.NoteEdit;
+import es.unizar.eina.notepadv3.Notepadv3;
 import es.unizar.eina.notepadv3.NotesDbAdapter;
 import es.unizar.eina.notepadv3.R;
 import es.unizar.eina.send.SendAbstraction;
@@ -27,6 +31,7 @@ public class Category extends AppCompatActivity {
 
     private static final int ACTIVITY_CREATE = 0;
     private static final int ACTIVITY_EDIT = 1;
+    private static final int ACTIVITY_NOTES = 2;
 
     private static final int PRUEBAS = Menu.FIRST;
     private static final int DELETE_ID = Menu.FIRST + 1;
@@ -35,6 +40,7 @@ public class Category extends AppCompatActivity {
     private NotesDbAdapter mDbHelper;
     private ListView mList;
 
+    private int checkedItem = 1;
 
     /**
      * Called when the activity is first created.
@@ -53,6 +59,14 @@ public class Category extends AppCompatActivity {
             }
         });
 
+        Button btn_ojo= (Button) findViewById(R.id.btn_ojo);
+        btn_ojo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAlertDialog();
+            }
+        });
+
         mDbHelper = new NotesDbAdapter(this);
         mDbHelper.open();
         mList = (ListView) findViewById(R.id.list);
@@ -62,16 +76,40 @@ public class Category extends AppCompatActivity {
 
     }
 
+    private void showAlertDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Ver");
+        String[] items = {"Notas","Categorías"};
+        alertDialog.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                checkedItem = which;
+                switch (which) {
+                    case 0: // NOTAS
+                        fetchNotes();
+                        break;
+                    case 1: // CATEGORIAS
+                        fillData();
+                        break;
+                }
+            }
+        });
+        AlertDialog alert = alertDialog.create();
+        alert.setCanceledOnTouchOutside(false);
+        alert.show();
+    }
+
     private void fillData() {
         // Get all of the notes from the database and create the item list
         Cursor notesCursor = mDbHelper.fetchAllItems(CATEGORY);
         startManagingCursor(notesCursor);
 
         // Create an array to specify the fields we want to display in the list (only TITLE)
-        String[] notas = new String[]{NotesDbAdapter.KEY_TITLE};
+        String[] notas = new String[]{NotesDbAdapter.KEY_TITLE_CAT};
 
         // and an array of the fields we want to bind those fields to (in this case just text1)
         int[] notes_layout = new int[]{R.id.nom_categoria};
+        Log.i("TAG",Integer.toString(notes_layout.length));
 
         // Now create an array adapter and set it to display using our row
         SimpleCursorAdapter notes =
@@ -84,7 +122,7 @@ public class Category extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
         //menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.menu_insert);
-        menu.add(Menu.NONE, PRUEBAS, Menu.NONE, R.string.menu_pruebas);
+        //menu.add(Menu.NONE, PRUEBAS, Menu.NONE, R.string.menu_pruebas);
 
         //MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.menu_category, menu);
@@ -116,7 +154,7 @@ public class Category extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case DELETE_ID:
-                mDbHelper.deleteItem(NOTE, info.id);
+                mDbHelper.deleteItem(CATEGORY, info.id);
                 fillData();
                 return true;
             case EDIT_ID:
@@ -135,6 +173,11 @@ public class Category extends AppCompatActivity {
         Intent i = new Intent(this, CategoryEdit.class);
         i.putExtra(NotesDbAdapter.KEY_ROWID, id);
         startActivityForResult(i, ACTIVITY_EDIT);
+    }
+
+    private void fetchNotes() {
+        Intent i = new Intent(this, Notepadv3.class);
+        startActivityForResult(i, ACTIVITY_NOTES);
     }
 
     @Override

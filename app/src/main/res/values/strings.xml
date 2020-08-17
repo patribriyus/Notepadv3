@@ -24,6 +24,7 @@
     <string name="body">Cuerpo</string>
     <string name="category">Categoría</string>
     <string name="confirm">Confirmar</string>
+    <string name="discard">Cancelar</string>
     <string name="edit_note">Editar nota</string>
 
     // Vista 'Editar categoría'

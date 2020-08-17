@@ -125,15 +125,18 @@ public class NotesDbAdapter {
         if (isEmpty(title.replaceAll("\\s*", ""))) return -1;
 
         ContentValues initialValues = new ContentValues();
-        initialValues.put(KEY_TITLE, title);
 
         if(item == Item.NOTE) {
+            initialValues.put(KEY_TITLE, title);
             initialValues.put(KEY_BODY, body);
             initialValues.put(KEY_CATEGORY, category);
 
             return mDb.insert(NOTES_DATABASE_TABLE, null, initialValues);
         }
-        else return mDb.insert(CATEGORIES_DATABASE_TABLE, null, initialValues);
+        else {
+            initialValues.put(KEY_TITLE_CAT, title);
+            return mDb.insert(CATEGORIES_DATABASE_TABLE, null, initialValues);
+        }
 
     }
 
@@ -154,14 +157,12 @@ public class NotesDbAdapter {
      * @return Cursor over all notes
      */
     public Cursor fetchAllItems(Item item) {
-        if(item == item.NOTE){
-            String MY_QUERY = "select * FROM notes n left join categories c on n.category = c.`_id`";
-            return mDb.rawQuery(MY_QUERY, null);
-        }
-        else{
-            return mDb.query(CATEGORIES_DATABASE_TABLE, new String[]{KEY_ROWID, KEY_TITLE},
-                    null, null, null, null, KEY_TITLE);
-        }
+        String MY_QUERY;
+
+        if(item == item.NOTE)  MY_QUERY = "select n._id, n.title, c.title_cat FROM notes n left join categories c on n.category = c._id order by n.title";
+        else MY_QUERY = "SELECT _id, title_cat FROM categories WHERE `_id` > 1";
+
+        return mDb.rawQuery(MY_QUERY, null);
     }
 
     /**
@@ -182,7 +183,7 @@ public class NotesDbAdapter {
         else{
             mCursor =
                     mDb.query(true, CATEGORIES_DATABASE_TABLE, new String[]{KEY_ROWID,
-                                    KEY_TITLE}, KEY_ROWID + "=" + rowId, null,
+                                    KEY_TITLE_CAT}, KEY_ROWID + "=" + rowId, null,
                             null, null, null, null);
         }
         if (mCursor != null) {
@@ -204,15 +205,16 @@ public class NotesDbAdapter {
      */
     public boolean updateItem(Item item, long rowId, String title, String body, long category) {
         ContentValues args = new ContentValues();
-        args.put(KEY_TITLE, title);
 
         if(item == item.NOTE){
+            args.put(KEY_TITLE, title);
             args.put(KEY_BODY, body);
             args.put(KEY_CATEGORY, category);
 
             return mDb.update(NOTES_DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
         }
         else{
+            args.put(KEY_TITLE_CAT, title);
             return mDb.update(CATEGORIES_DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
         }
     }

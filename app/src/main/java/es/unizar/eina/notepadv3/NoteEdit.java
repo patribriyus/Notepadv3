@@ -79,13 +79,22 @@ public class NoteEdit extends AppCompatActivity {
             }
 
         });
+
+        Button discard= (Button) findViewById(R.id.discard);
+        discard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     // Recupera los datos de la nota (titulo y cuerpo)
     private void populateFields() {
         if (mRowId != null) {
-            Cursor note = mDbHelper.fetchItem(NOTE, mRowId); // Recupera la nota
+            Cursor note = mDbHelper.fetchItem(NOTE, mRowId);
             startManagingCursor(note);
+
             mIdText.setText(mRowId.toString());
             mTitleText.setText(note.getString(
                     note.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE)));
@@ -130,34 +139,4 @@ public class NoteEdit extends AppCompatActivity {
             mDbHelper.updateItem(NOTE, mRowId, title, body, category);
         }
     }
-
-    /*
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.note_edit);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_note_edit, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-    */
 }

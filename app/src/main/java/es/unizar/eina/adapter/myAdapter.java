@@ -2,6 +2,7 @@ package es.unizar.eina.adapter;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +34,7 @@ public class myAdapter extends CursorAdapter {
         // Extract properties from cursor
         String body = cursor.getString(cursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE));
         String priority = cursor.getString(cursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE_CAT));
+        //Log.i("myAdapter", cursor.getString(cursor.getColumnIndexOrThrow(NotesDbAdapter.KEY_ROWID)));
         // Populate fields with extracted properties
         nom_nota.setText(body);
         nom_categoria.setText(priority);
