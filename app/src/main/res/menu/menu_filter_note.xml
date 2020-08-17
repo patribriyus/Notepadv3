@@ -5,26 +5,26 @@
     <item
         android:id="@+id/mostrar_notas"
         android:title="Mostrar por"
-        app:showAsAction="ifRoom">
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_sort_foreground">
 
         <menu>
             <item
                 android:id="@+id/sort_by"
-                android:title="Ordenación"
+                android:title="Ordenar por"
                 app:showAsAction="ifRoom">
                 <menu>
                     <item
-                        android:id="@+id/byd_categories"
+                        android:id="@+id/by_categories"
                         android:title="Título" />
                     <item
                         android:id="@+id/by_title"
                         android:title="Categoría" />
                 </menu>
-
             </item>
             <item
-                android:id="@+id/by_categories"
-                android:title="Por categoría" />
+                android:id="@+id/group_categories"
+                android:title="Ver notas categoría" />
         </menu>
 
     </item>
