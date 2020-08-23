@@ -15,16 +15,16 @@
                 app:showAsAction="ifRoom">
                 <menu>
                     <item
-                        android:id="@+id/by_categories"
+                        android:id="@+id/by_title"
                         android:title="Título" />
                     <item
-                        android:id="@+id/by_title"
+                        android:id="@+id/by_categories"
                         android:title="Categoría" />
                 </menu>
             </item>
             <item
                 android:id="@+id/group_categories"
-                android:title="Ver notas categoría" />
+                android:title="Ver notas categoría"/>
         </menu>
 
     </item>

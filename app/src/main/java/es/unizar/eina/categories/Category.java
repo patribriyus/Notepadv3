@@ -94,14 +94,15 @@ public class Category extends AppCompatActivity {
                 }
             }
         });
+        alertDialog.setNegativeButton("Cancelar", null);
         AlertDialog alert = alertDialog.create();
-        alert.setCanceledOnTouchOutside(false);
+        alert.setCanceledOnTouchOutside(true);
         alert.show();
     }
 
     private void fillData() {
         // Get all of the notes from the database and create the item list
-        Cursor notesCursor = mDbHelper.fetchAllItems(CATEGORY);
+        Cursor notesCursor = mDbHelper.fetchAllCategories();
         startManagingCursor(notesCursor);
 
         // Create an array to specify the fields we want to display in the list (only TITLE)
@@ -109,7 +110,7 @@ public class Category extends AppCompatActivity {
 
         // and an array of the fields we want to bind those fields to (in this case just text1)
         int[] notes_layout = new int[]{R.id.nom_categoria};
-        Log.i("TAG",Integer.toString(notes_layout.length));
+        //Log.i("TAG",Integer.toString(notes_layout.length));
 
         // Now create an array adapter and set it to display using our row
         SimpleCursorAdapter notes =

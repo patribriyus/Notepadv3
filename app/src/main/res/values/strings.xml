@@ -26,10 +26,12 @@
     <string name="confirm">Confirmar</string>
     <string name="discard">Cancelar</string>
     <string name="edit_note">Editar nota</string>
+    <string name="create_note">Crear nota</string>
 
     // Vista 'Editar categoría'
     <string name="title_activity_cat_edit">EditCategory</string>
     <string name="ID_cat">ID</string>
     <string name="title_cat">Título</string>
     <string name="edit_cat">Editar categoría</string>
+    <string name="create_cat">Crear categoría</string>
 </resources>

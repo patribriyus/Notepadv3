@@ -18,12 +18,15 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 import es.unizar.eina.categories.Category;
 import es.unizar.eina.adapter.myAdapter;
 import es.unizar.eina.send.MailImplementor;
 import es.unizar.eina.send.SendAbstraction;
 import es.unizar.eina.send.SendAbstractionImpl;
 
+import static es.unizar.eina.notepadv3.NotesDbAdapter.Item.CATEGORY;
 import static es.unizar.eina.notepadv3.NotesDbAdapter.Item.NOTE;
 
 
@@ -43,7 +46,6 @@ public class Notepadv3 extends AppCompatActivity {
     private ListView mList;
 
     private int checkedItem = 0;
-
 
     /**
      * Called when the activity is first created.
@@ -73,10 +75,48 @@ public class Notepadv3 extends AppCompatActivity {
         mDbHelper = new NotesDbAdapter(this);
         mDbHelper.open();
         mList = (ListView) findViewById(R.id.list);
-        fillData();
+        fillData(NOTE);
 
         registerForContextMenu(mList);
 
+    }
+
+    private void showDialogCategories(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Ver notas de la categoría");
+
+        // Get all of the notes from the database and create the item list
+        final Cursor notesCursor = mDbHelper.fetchAllItems(CATEGORY);
+        startManagingCursor(notesCursor);
+
+        // Create an array to specify the fields we want to display in the list (only TITLE)
+        String[] items = new String[]{NotesDbAdapter.KEY_TITLE_CAT};
+
+        // and an array of the fields we want to bind those fields to (in this case just text1)
+        int[] notes_layout = new int[]{R.id.nom_categoria};
+
+        //Log.i("TAG",Integer.toString(notes_layout.length));
+
+        // Now create an array adapter and set it to display using our row
+        final SimpleCursorAdapter notes =
+                new SimpleCursorAdapter(this, R.layout.categories_row, notesCursor, items, notes_layout);
+
+        alertDialog.setSingleChoiceItems(notesCursor, -1, NotesDbAdapter.KEY_TITLE_CAT,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // llamada a funcion para mostrar notas de la cat seleccionada
+                        notesCursor.moveToPosition(which);
+                        Long id = notesCursor.getLong(notesCursor.getColumnIndex(NotesDbAdapter.KEY_ROWID));
+                        fillData(id);
+                        dialog.dismiss();
+                    }
+                });
+
+        alertDialog.setNegativeButton("Cancelar", null);
+        AlertDialog alert = alertDialog.create();
+        alert.setCanceledOnTouchOutside(true);
+        alert.show();
     }
 
     private void showAlertDialog() {
@@ -89,29 +129,46 @@ public class Notepadv3 extends AppCompatActivity {
                 checkedItem = which;
                 switch (which) {
                     case 0: // NOTAS
-                        //Toast.makeText(Notepadv3.this, "Ver notas", Toast.LENGTH_LONG).show();
-                        fillData();
+                        fillData(NOTE);
                         break;
                     case 1: // CATEGORIAS
-                        //Toast.makeText(Notepadv3.this, "Ver categorías", Toast.LENGTH_LONG).show();
                         fetchCategories();
                         break;
                 }
             }
         });
+
+        alertDialog.setNegativeButton("Cancelar", null);
         AlertDialog alert = alertDialog.create();
-        alert.setCanceledOnTouchOutside(false);
+        alert.setCanceledOnTouchOutside(true);
         alert.show();
     }
 
-    private void fillData() {
+    private void fillData(NotesDbAdapter.Item item) {
         // Get all of the notes from the database and create the item list
-        Cursor notesCursor = mDbHelper.fetchAllItems(NOTE);
+        Cursor notesCursor = mDbHelper.fetchAllItems(item);
 
         myAdapter adapter = new myAdapter(this, notesCursor);
         mList.setAdapter(adapter);
     }
 
+    // Muestra las notas pertenecientes solo a la categoria con ID = id
+    private void fillData(Long id) {
+        // Get all of the notes from the database and create the item list
+        Cursor notesCursor = mDbHelper.fetchAllItems(CATEGORY, id);
+
+        myAdapter adapter = new myAdapter(this, notesCursor);
+        mList.setAdapter(adapter);
+    }
+
+    // Muestra las notas por orden alfabético/categoria
+    private void fillData() {
+        // Get all of the notes from the database and create the item list
+        Cursor notesCursor = mDbHelper.fetchAllItems();
+
+        myAdapter adapter = new myAdapter(this, notesCursor);
+        mList.setAdapter(adapter);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,10 +185,15 @@ public class Notepadv3 extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            /*case R.id.btn_add:
-                Log.i("TAG","Se ha pulsado el boton de add");
-                createNote();
-                return true;*/
+            case R.id.group_categories:
+                showDialogCategories();
+                return true;
+            case R.id.by_categories:
+                fillData();
+                return true;
+            case R.id.by_title:
+                fillData(NOTE);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -153,7 +215,7 @@ public class Notepadv3 extends AppCompatActivity {
             case DELETE_ID:
                 Log.i("TAG",String.valueOf(item.getItemId()));
                 mDbHelper.deleteItem(NOTE, info.id);
-                fillData();
+                fillData(NOTE);
                 return true;
             case EDIT_ID:
                 editNote(info.position, info.id);
@@ -195,7 +257,7 @@ public class Notepadv3 extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        fillData();
+        fillData(NOTE);
     }
 
 }

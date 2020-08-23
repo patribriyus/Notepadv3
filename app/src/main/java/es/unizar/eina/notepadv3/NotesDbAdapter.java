@@ -40,18 +40,22 @@ public class NotesDbAdapter {
      * Database creation sql statement
      */
     private static final String NOTES_DATABASE_CREATE =
-            "create table notes (_id integer primary key autoincrement, "
-                    + "title text not null, body text not null, category integer not null,"
-                    + "foreign key(category) references categories(_id) on delete set DEFAULT);";
+            "create table notes (_id integer primary key autoincrement not null, "
+                    + "title text not null, body text not null, category integer DEFAULT 1);";
     private static final String CATEGORIES_DATABASE_CREATE =
             "create table categories (_id integer primary key autoincrement, "
                     + "title_cat text not null);";
+    private static final String DATABASE_TRIGGER =
+            "create trigger trigger_notes before delete on categories "
+            + "for each row BEGIN "
+            + "update notes set category = 1 where category = old._id; "
+            + "END;";
 
     private static final String NOTES_DATABASE_TABLE = "notes";
     private static final String CATEGORIES_DATABASE_TABLE = "categories";
 
-    private static final String DATABASE_NAME = "data";
-    private static final int DATABASE_VERSION = 5;
+    private static final String DATABASE_NAME = "database";
+    private static final int DATABASE_VERSION = 1;
 
     private final Context mCtx;
 
@@ -63,10 +67,11 @@ public class NotesDbAdapter {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL(NOTES_DATABASE_CREATE);
             db.execSQL(CATEGORIES_DATABASE_CREATE);
+            db.execSQL(NOTES_DATABASE_CREATE);
+            db.execSQL(DATABASE_TRIGGER);
 
-            // Se inserta la categoria por defecto
+            // Se inserta la categoria por defecto '--'
             ContentValues initialValues = new ContentValues();
             initialValues.put(KEY_TITLE_CAT, "--");
             db.insert(CATEGORIES_DATABASE_TABLE, null, initialValues);
@@ -160,8 +165,29 @@ public class NotesDbAdapter {
         String MY_QUERY;
 
         if(item == item.NOTE)  MY_QUERY = "select n._id, n.title, c.title_cat FROM notes n left join categories c on n.category = c._id order by n.title";
-        else MY_QUERY = "SELECT _id, title_cat FROM categories WHERE `_id` > 1";
+        else MY_QUERY = "SELECT _id, title_cat FROM categories";
 
+        return mDb.rawQuery(MY_QUERY, null);
+    }
+
+    // Muestra las notas pertenecientes solo a la categoria con ID = id
+    public Cursor fetchAllItems(Item item, Long id) {
+        String MY_QUERY = "select n._id, n.title, c.title_cat FROM notes n left join categories c on n.category = c._id "
+        + " WHERE n.category = " + id + " order by n.title";
+
+        return mDb.rawQuery(MY_QUERY, null);
+    }
+
+    // Muestra las notas ordenadas por orden alfabético/categoría
+    public Cursor fetchAllItems() {
+        String MY_QUERY = "select n._id, n.title, c.title_cat FROM notes n left join categories c on n.category = c._id order by c.title_cat";
+
+        return mDb.rawQuery(MY_QUERY, null);
+    }
+
+    // Función solo para mostrar todas las categorías menos la predeterminada
+    public Cursor fetchAllCategories() {
+        String MY_QUERY = "SELECT _id, title_cat FROM categories WHERE `_id` > 1";
         return mDb.rawQuery(MY_QUERY, null);
     }
 

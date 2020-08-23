@@ -34,7 +34,6 @@ public class CategoryEdit extends AppCompatActivity {
         mDbHelper.open();
 
         setContentView(R.layout.category_edit);
-        setTitle(R.string.edit_cat);
 
         mTitleText = (EditText) findViewById(R.id.title_cat);
         mIdText = (EditText) findViewById(R.id.id_cat);
@@ -72,12 +71,14 @@ public class CategoryEdit extends AppCompatActivity {
     // Recupera los datos de la categoria
     private void populateFields() {
         if (mRowId != null) {
+            setTitle(R.string.edit_cat);
             Cursor note = mDbHelper.fetchItem(CATEGORY, mRowId); // Recupera la categoria
             startManagingCursor(note);
             mIdText.setText(mRowId.toString());
             mTitleText.setText(note.getString(
                     note.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE_CAT)));
         } else {
+            setTitle(R.string.create_cat);
             mIdText.setText("***");
         }
     }
