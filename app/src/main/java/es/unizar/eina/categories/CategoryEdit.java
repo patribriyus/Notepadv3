@@ -23,6 +23,7 @@ public class CategoryEdit extends AppCompatActivity {
     private EditText mTitleText;
     private EditText mIdText;
     private Long mRowId;
+    private boolean ok = false;
 
     private NotesDbAdapter mDbHelper;
 
@@ -53,6 +54,7 @@ public class CategoryEdit extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+                ok = true;
                 setResult(RESULT_OK);
                 finish();
             }
@@ -104,13 +106,16 @@ public class CategoryEdit extends AppCompatActivity {
 
     private void saveState() {
         String title = mTitleText.getText().toString();
-        if (mRowId == null) {
-            long id = mDbHelper.createItem(CATEGORY, title, null, 0);
-            if (id > 0) {
-                mRowId = id;
+
+        if(ok) {
+            if (mRowId == null) {
+                long id = mDbHelper.createItem(CATEGORY, title, null, 0);
+                if (id > 0) {
+                    mRowId = id;
+                }
+            } else {
+                mDbHelper.updateItem(CATEGORY, mRowId, title, null, 0);
             }
-        } else {
-            mDbHelper.updateItem(CATEGORY, mRowId, title, null, 0);
         }
     }
 }

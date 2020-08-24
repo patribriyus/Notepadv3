@@ -2,9 +2,11 @@ package es.unizar.eina.notepadv3;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,6 +28,7 @@ public class NoteEdit extends AppCompatActivity {
     private EditText mIdText;
     private Spinner spinner;
     private Long mRowId;
+    private boolean ok = false;
 
     private NotesDbAdapter mDbHelper;
 
@@ -60,6 +63,7 @@ public class NoteEdit extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+                ok = true;
                 setResult(RESULT_OK);
                 finish();
             }
@@ -139,14 +143,16 @@ public class NoteEdit extends AppCompatActivity {
         String title = mTitleText.getText().toString();
         String body = mBodyText.getText().toString();
         Long category = spinner.getSelectedItemId();
-        //int category = 1;
-        if (mRowId == null) {
-            long id = mDbHelper.createItem(NOTE, title, body, category);
-            if (id > 0) {
-                mRowId = id;
+
+        if(ok) {
+            if (mRowId == null) {
+                long id = mDbHelper.createItem(NOTE, title, body, category);
+                if (id > 0) {
+                    mRowId = id;
+                }
+            } else {
+                mDbHelper.updateItem(NOTE, mRowId, title, body, category);
             }
-        } else {
-            mDbHelper.updateItem(NOTE, mRowId, title, body, category);
         }
     }
 }
