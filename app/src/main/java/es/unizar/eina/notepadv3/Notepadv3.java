@@ -16,15 +16,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
-
-import java.util.Arrays;
 
 import es.unizar.eina.categories.Category;
-import es.unizar.eina.adapter.myAdapter;
-import es.unizar.eina.send.MailImplementor;
+import es.unizar.eina.adapter.MyAdapter;
 import es.unizar.eina.send.SendAbstraction;
 import es.unizar.eina.send.SendAbstractionImpl;
+import es.unizar.eina.test.Test;
 
 import static es.unizar.eina.notepadv3.NotesDbAdapter.Item.CATEGORY;
 import static es.unizar.eina.notepadv3.NotesDbAdapter.Item.NOTE;
@@ -36,11 +33,14 @@ public class Notepadv3 extends AppCompatActivity {
     private static final int ACTIVITY_EDIT = 1;
     private static final int ACTIVITY_CATEGORIES = 2;
 
-    private static final int PRUEBAS = Menu.FIRST;
-    private static final int DELETE_ID = Menu.FIRST + 1;
-    private static final int EDIT_ID = Menu.FIRST + 2;
-    private static final int SEND_MAIL_ID = Menu.FIRST + 3;
-    private static final int SEND_SMS_ID = Menu.FIRST + 4;
+    private static final int DELETE_ID = Menu.FIRST;
+    private static final int EDIT_ID = Menu.FIRST + 1;
+    private static final int SEND_MAIL_ID = Menu.FIRST + 2;
+    private static final int SEND_SMS_ID = Menu.FIRST + 3;
+
+    private static final int PRUEBA_CAJA_NEGRA = Menu.FIRST + 4;
+    private static final int PRUEBA_SISTEMA_VOLUMEN = Menu.FIRST + 5;
+    private static final int PRUEBAS_SISTEMA_SOBRECARGA = Menu.FIRST + 6;
 
     private NotesDbAdapter mDbHelper;
     private ListView mList;
@@ -148,7 +148,7 @@ public class Notepadv3 extends AppCompatActivity {
         // Get all of the notes from the database and create the item list
         Cursor notesCursor = mDbHelper.fetchAllItems(item);
 
-        myAdapter adapter = new myAdapter(this, notesCursor);
+        MyAdapter adapter = new MyAdapter(this, notesCursor);
         mList.setAdapter(adapter);
     }
 
@@ -157,7 +157,7 @@ public class Notepadv3 extends AppCompatActivity {
         // Get all of the notes from the database and create the item list
         Cursor notesCursor = mDbHelper.fetchAllItems(CATEGORY, id);
 
-        myAdapter adapter = new myAdapter(this, notesCursor);
+        MyAdapter adapter = new MyAdapter(this, notesCursor);
         mList.setAdapter(adapter);
     }
 
@@ -166,15 +166,16 @@ public class Notepadv3 extends AppCompatActivity {
         // Get all of the notes from the database and create the item list
         Cursor notesCursor = mDbHelper.fetchAllItems();
 
-        myAdapter adapter = new myAdapter(this, notesCursor);
+        MyAdapter adapter = new MyAdapter(this, notesCursor);
         mList.setAdapter(adapter);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        //menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.menu_insert);
-        menu.add(Menu.NONE, PRUEBAS, Menu.NONE, R.string.menu_pruebas);
+        menu.add(Menu.NONE, PRUEBA_CAJA_NEGRA, Menu.NONE, R.string.caja_negra);
+        menu.add(Menu.NONE, PRUEBA_SISTEMA_VOLUMEN, Menu.NONE, R.string.prueba_volumen);
+        menu.add(Menu.NONE, PRUEBAS_SISTEMA_SOBRECARGA, Menu.NONE, R.string.prueba_sobrecarga);
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_filter_note, menu);
@@ -193,6 +194,15 @@ public class Notepadv3 extends AppCompatActivity {
                 return true;
             case R.id.by_title:
                 fillData(NOTE);
+                return true;
+            case PRUEBA_CAJA_NEGRA:
+                pruebas(0);
+                return true;
+            case PRUEBA_SISTEMA_VOLUMEN:
+                pruebas(1);
+                return true;
+            case PRUEBAS_SISTEMA_SOBRECARGA:
+                pruebas(2);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -252,6 +262,16 @@ public class Notepadv3 extends AppCompatActivity {
     private void fetchCategories() {
         Intent i = new Intent(this, Category.class);
         startActivityForResult(i, ACTIVITY_CATEGORIES);
+    }
+
+    public void pruebas(int prueba){
+        Test test = new Test(mDbHelper);
+
+        if (prueba == 0) test.caja_negra();
+        else if (prueba == 1) test.volumen();
+        else test.sobrecarga();
+
+        fillData(NOTE);
     }
 
     @Override

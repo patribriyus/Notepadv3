@@ -3,9 +3,10 @@
     <string name="no_notes">No Notes Yet</string>
     <string name="action_settings">Vista previa</string>
 
-    // Opciones generales
-    <string name="menu_insert">Añadir nota</string>
-    <string name="menu_pruebas">Prueba</string>
+    // Opciones generales PRUEBAS
+    <string name="caja_negra">Caja negra</string>
+    <string name="prueba_volumen">Prueba de volumen</string>
+    <string name="prueba_sobrecarga">Prueba de sobrecarga</string>
 
     // Opciones de una nota
     <string name="menu_note_delete">Eliminar nota</string>

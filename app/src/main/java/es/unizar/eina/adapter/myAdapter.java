@@ -12,8 +12,8 @@ import android.widget.TextView;
 import es.unizar.eina.notepadv3.NotesDbAdapter;
 import es.unizar.eina.notepadv3.R;
 
-public class myAdapter extends CursorAdapter {
-    public myAdapter(Context context, Cursor cursor) {
+public class MyAdapter extends CursorAdapter {
+    public MyAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
     }
 
