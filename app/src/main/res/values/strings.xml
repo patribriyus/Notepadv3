@@ -4,8 +4,9 @@
     <string name="action_settings">Vista previa</string>
 
     // Opciones generales PRUEBAS
-    <string name="caja_negra">Caja negra</string>
+    <string name="caja_negra">Prueba de caja negra</string>
     <string name="prueba_volumen">Prueba de volumen</string>
+    <string name="prueba_volumen_fin">Prueba de volumen fin</string>
     <string name="prueba_sobrecarga">Prueba de sobrecarga</string>
 
     // Opciones de una nota

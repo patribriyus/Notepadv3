@@ -40,7 +40,8 @@ public class Notepadv3 extends AppCompatActivity {
 
     private static final int PRUEBA_CAJA_NEGRA = Menu.FIRST + 4;
     private static final int PRUEBA_SISTEMA_VOLUMEN = Menu.FIRST + 5;
-    private static final int PRUEBAS_SISTEMA_SOBRECARGA = Menu.FIRST + 6;
+    private static final int PRUEBA_SISTEMA_VOLUMEN_FIN = Menu.FIRST + 6;
+    private static final int PRUEBAS_SISTEMA_SOBRECARGA = Menu.FIRST + 7;
 
     private NotesDbAdapter mDbHelper;
     private ListView mList;
@@ -175,6 +176,7 @@ public class Notepadv3 extends AppCompatActivity {
         boolean result = super.onCreateOptionsMenu(menu);
         menu.add(Menu.NONE, PRUEBA_CAJA_NEGRA, Menu.NONE, R.string.caja_negra);
         menu.add(Menu.NONE, PRUEBA_SISTEMA_VOLUMEN, Menu.NONE, R.string.prueba_volumen);
+        menu.add(Menu.NONE, PRUEBA_SISTEMA_VOLUMEN_FIN, Menu.NONE, R.string.prueba_volumen_fin);
         menu.add(Menu.NONE, PRUEBAS_SISTEMA_SOBRECARGA, Menu.NONE, R.string.prueba_sobrecarga);
 
         MenuInflater inflater = getMenuInflater();
@@ -201,8 +203,11 @@ public class Notepadv3 extends AppCompatActivity {
             case PRUEBA_SISTEMA_VOLUMEN:
                 pruebas(1);
                 return true;
-            case PRUEBAS_SISTEMA_SOBRECARGA:
+            case PRUEBA_SISTEMA_VOLUMEN_FIN:
                 pruebas(2);
+                return true;
+            case PRUEBAS_SISTEMA_SOBRECARGA:
+                pruebas(3);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -269,6 +274,7 @@ public class Notepadv3 extends AppCompatActivity {
 
         if (prueba == 0) test.caja_negra();
         else if (prueba == 1) test.volumen();
+        else if (prueba == 2) test.volumenFin();
         else test.sobrecarga();
 
         fillData(NOTE);

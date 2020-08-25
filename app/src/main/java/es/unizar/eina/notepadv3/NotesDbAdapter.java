@@ -126,8 +126,9 @@ public class NotesDbAdapter {
      * @param body  the body of the note
      * @return rowId or -1 if failed
      */
-    public long createItem(Item item, String title, String body, long category) {
-        if (isEmpty(title.replaceAll("\\s*", ""))) return -1;
+    public long createItem(Item item, String title, String body, Long category) {
+        if (title==null || isEmpty(title.replaceAll("\\s*", ""))
+                || body==null || category==null || category < 1) return -1;
 
         ContentValues initialValues = new ContentValues();
 
@@ -152,8 +153,12 @@ public class NotesDbAdapter {
      * @return true if deleted, false otherwise
      */
     public boolean deleteItem(Item item, long rowId) {
-        if(item == item.NOTE) return mDb.delete(NOTES_DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
-        else return mDb.delete(CATEGORIES_DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+        if(rowId > 0) {
+            if (item == item.NOTE)
+                return mDb.delete(NOTES_DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+            else return mDb.delete(CATEGORIES_DATABASE_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
+        }
+        else return false;
     }
 
     /**
@@ -229,7 +234,10 @@ public class NotesDbAdapter {
      * @param body  value to set note body to
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateItem(Item item, long rowId, String title, String body, long category) {
+    public boolean updateItem(Item item, long rowId, String title, String body, Long category) {
+        if (title==null || isEmpty(title.replaceAll("\\s*", ""))
+                || body==null || category==null || category < 1 || rowId < 1) return false;
+
         ContentValues args = new ContentValues();
 
         if(item == item.NOTE){

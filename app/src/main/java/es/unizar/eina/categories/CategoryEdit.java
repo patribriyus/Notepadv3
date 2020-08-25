@@ -109,12 +109,12 @@ public class CategoryEdit extends AppCompatActivity {
 
         if(ok) {
             if (mRowId == null) {
-                long id = mDbHelper.createItem(CATEGORY, title, null, 0);
+                long id = mDbHelper.createItem(CATEGORY, title, "", Long.valueOf(1));
                 if (id > 0) {
                     mRowId = id;
                 }
             } else {
-                mDbHelper.updateItem(CATEGORY, mRowId, title, null, 0);
+                mDbHelper.updateItem(CATEGORY, mRowId, title, "", Long.valueOf(1));
             }
         }
     }
