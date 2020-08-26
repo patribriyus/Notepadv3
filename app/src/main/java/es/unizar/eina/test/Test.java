@@ -190,7 +190,7 @@ public class Test {
             while (true) {
                 char[] chars = new char[longitudTxt];
                 Arrays.fill(chars, '*');
-                ID = createNote(prefijo + i.toString(), "", Long.valueOf(1));
+                ID = createNote(prefijo + i.toString(), new String(chars), Long.valueOf(1));
                 d("Se ha creado nota con longitud", longitudTxt.toString());
 
                 longitudTxt *= 2; i++;

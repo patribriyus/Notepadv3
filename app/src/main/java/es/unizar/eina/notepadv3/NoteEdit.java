@@ -63,6 +63,7 @@ public class NoteEdit extends AppCompatActivity {
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
+                //((Bundle)((Object) view)).clear(); // esto causará un error
                 ok = true;
                 setResult(RESULT_OK);
                 finish();
