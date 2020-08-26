@@ -166,7 +166,7 @@ public class Test {
     public void volumenFin(){
         try {
             for (Integer i = 0; i < NUM_NOTAS; i++) {
-                deleteNote(idRow-i);
+                deleteNote();
                 d("Se ha eliminado la nota número", i.toString());
             }
         } catch (RuntimeException e) {
@@ -191,11 +191,12 @@ public class Test {
                 char[] chars = new char[longitudTxt];
                 Arrays.fill(chars, '*');
                 ID = createNote(prefijo + i.toString(), "", Long.valueOf(1));
-                if (ID != -1) d("Se ha creado nota con longitud", longitudTxt.toString());
-                else d("No se ha podido crear la nota con longitud", longitudTxt.toString());
+                d("Se ha creado nota con longitud", longitudTxt.toString());
+
                 longitudTxt *= 2; i++;
             }
         } catch (RuntimeException e) {
+            d("No se ha podido crear la nota con longitud", longitudTxt.toString());
             System.out.println(e.getMessage());
         }
     }
@@ -237,6 +238,17 @@ public class Test {
     public boolean deleteNote(long rowId){
         try {
             boolean salida = mDbHelper.deleteItem(Item.NOTE, rowId);
+            d("+", " RESULTADO CORRECTO");
+            return salida;
+        } catch (Throwable t){
+            d("EXCEPCION/ERROR", "- RESULTADO INCORRECTO", t);
+            return(false);
+        }
+    }
+    // Prueba volumen
+    public boolean deleteNote(){
+        try {
+            boolean salida = mDbHelper.deleteItem();
             d("+", " RESULTADO CORRECTO");
             return salida;
         } catch (Throwable t){

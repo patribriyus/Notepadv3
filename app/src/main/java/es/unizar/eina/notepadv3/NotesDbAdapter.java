@@ -162,6 +162,15 @@ public class NotesDbAdapter {
     }
 
     /**
+     * Elimina las notas creadas por la prueba de volumen a través del título
+     *
+     * @return true if deleted, false otherwise
+     */
+    public boolean deleteItem() {
+         return mDb.delete(NOTES_DATABASE_TABLE, KEY_TITLE + " LIKE 'Nota_%'", null) > 0;
+    }
+
+    /**
      * Return a Cursor over the list of all notes in the database
      *
      * @return Cursor over all notes
