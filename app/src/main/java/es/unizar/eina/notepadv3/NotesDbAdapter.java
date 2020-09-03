@@ -98,7 +98,7 @@ public class NotesDbAdapter {
     }
 
     /**
-     * Open the notes database. If it cannot be opened, try to create a new
+     * Open the notes and categories databases. If it cannot be opened, try to create a new
      * instance of the database. If it cannot be created, throw an exception to
      * signal the failure
      *
@@ -118,12 +118,12 @@ public class NotesDbAdapter {
 
 
     /**
-     * Create a new note using the title and body provided. If the note is
-     * successfully created return the new rowId for that note, otherwise return
+     * Create a new note/category using the title, body and category provided. If the note/category is
+     * successfully created return the new rowId for that note/category, otherwise return
      * a -1 to indicate failure.
      *
-     * @param title the title of the note
-     * @param body  the body of the note
+     * @param title the title of the note/category
+     * @param body  the body of the note/category
      * @return rowId or -1 if failed
      */
     public long createItem(Item item, String title, String body, Long category) {
@@ -171,9 +171,9 @@ public class NotesDbAdapter {
     }
 
     /**
-     * Return a Cursor over the list of all notes in the database
+     * Return a Cursor over the list of all notes/categories in the database
      *
-     * @return Cursor over all notes
+     * @return Cursor over all notes/categories
      */
     public Cursor fetchAllItems(Item item) {
         String MY_QUERY;
@@ -192,7 +192,7 @@ public class NotesDbAdapter {
         return mDb.rawQuery(MY_QUERY, null);
     }
 
-    // Muestra las notas ordenadas por orden alfabético/categoría
+    // Muestra las notas ordenadas por orden categoría
     public Cursor fetchAllItems() {
         String MY_QUERY = "select n._id, n.title, c.title_cat FROM notes n left join categories c on n.category = c._id order by c.title_cat";
 
@@ -206,10 +206,10 @@ public class NotesDbAdapter {
     }
 
     /**
-     * Return a Cursor positioned at the note that matches the given rowId
+     * Return a Cursor positioned at the note/category that matches the given rowId
      *
-     * @param rowId id of note to retrieve
-     * @return Cursor positioned to matching note, if found
+     * @param rowId id of note/category to retrieve
+     * @return Cursor positioned to matching note/category, if found
      * @throws SQLException if note could not be found/retrieved
      */
     public Cursor fetchItem(Item item, long rowId) throws SQLException {
@@ -234,13 +234,15 @@ public class NotesDbAdapter {
     }
 
     /**
-     * Update the note using the details provided. The note to be updated is
+     * Update the note/category using the details provided. The note to be updated is
      * specified using the rowId, and it is altered to use the title and body
      * values passed in
      *
+     * @param item note/category to update
      * @param rowId id of note to update
-     * @param title value to set note title to
+     * @param title value to set item title to
      * @param body  value to set note body to
+     * @param category  id of category's note
      * @return true if the note was successfully updated, false otherwise
      */
     public boolean updateItem(Item item, long rowId, String title, String body, Long category) {

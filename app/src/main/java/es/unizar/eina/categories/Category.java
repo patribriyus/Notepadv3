@@ -122,11 +122,6 @@ public class Category extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        //menu.add(Menu.NONE, INSERT_ID, Menu.NONE, R.string.menu_insert);
-        //menu.add(Menu.NONE, PRUEBAS, Menu.NONE, R.string.menu_pruebas);
-
-        //MenuInflater inflater = getMenuInflater();
-        //inflater.inflate(R.menu.menu_category, menu);
 
         return result;
     }

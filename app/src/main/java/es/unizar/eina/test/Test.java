@@ -1,9 +1,6 @@
 package es.unizar.eina.test;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import java.util.Arrays;
 
@@ -245,7 +242,8 @@ public class Test {
             return(false);
         }
     }
-    // Prueba volumen
+
+    // Eliminación de las notas generadas en prueba volumen
     public boolean deleteNote(){
         try {
             boolean salida = mDbHelper.deleteItem();
@@ -288,14 +286,14 @@ public class Test {
     }
 
     /**
-     * Crea una nueva nota a partir del título y texto proporcionados. Si la
-     * nota se crea correctamente, devuelve el nuevo rowId de la nota; en otro
+     * Crea una nueva categoría a partir del título proporcionado. Si la
+     * categoría se crea correctamente, devuelve el nuevo rowId de la categoría; en otro
      * caso, devuelve -1 para indicar el fallo.
      *
      * @param title
-     * el título de la nota;
+     * el título de la categoría;
      * title != null y title.length() > 0
-     * @return rowId de la nueva nota o -1 si no se ha podido crear
+     * @return rowId de la nueva categoría o -1 si no se ha podido crear
      */
     public long createCategory(String title){
         try{
@@ -309,12 +307,12 @@ public class Test {
     }
 
     /**
-     * Borra la nota cuyo rowId se ha pasado como parámetro
+     * Borra la categoría cuyo rowId se ha pasado como parámetro
      *
      * @param rowId
-     * el identificador de la nota que se desea borrar;
+     * el identificador de la categoría que se desea borrar;
      * rowId > 0
-     * @return true si y solo si la nota se ha borrado
+     * @return true si y solo si la categoría se ha borrado
      */
     public boolean deleteCategory(long rowId){
         try {
@@ -328,18 +326,18 @@ public class Test {
     }
 
     /**
-     * Actualiza una nota a partir de los valores de los parámetros. La nota que
+     * Actualiza una categoría a partir de los valores de los parámetros. La categoría que
      * se actualizará es aquella cuyo rowId coincida con el valor del parámetro.
      * Su título, texto y categoría se modificarán con los valores de title, body y category
      * respectivamente.
      *
      * @param rowId
-     * el identificador de la nota que se desea actualizar;
+     * el identificador de la categoría que se desea actualizar;
      * rowId > 0
      * @param title
-     * el título de la nota;
+     * el título de la categoría;
      * title != null y title.length() > 0
-     * @return true si y solo si la nota se actualizó correctamente
+     * @return true si y solo si la categoría se actualizó correctamente
      */
     public boolean updateCategory(long rowId, String title){
         try {
